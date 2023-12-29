@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+import os
+import re
 
 # CWE编号：样本数量
 cwe_cnt = {'122': 3486, '121': 3048, '78': 2800, '190': 2448, '762': 2072, '191': 1860, '134': 1680, '590': 1675,
@@ -34,10 +36,14 @@ def count_samples():
         print('{}: {}'.format(k, cnt[k]))
 
 
-def extract_single_cwe(cwe: int | str):
+def extract_cwe_info(cwe: int | str) -> list[dict]:
+    """将
+    :param cwe: CWE编号
+    :return:
+    """
     tree = ET.parse('/data/data/ws/sard-parse/C/manifest.xml')
     root = tree.getroot()
-    flaws = []
+    cwe_info = []
     for child in root:
         cwe_num = child[0].attrib['path'][3:child[0].attrib['path'].find('_')]
         if cwe_num != str(cwe) or len(child) != 1:  # 同下面注释
@@ -51,21 +57,46 @@ def extract_single_cwe(cwe: int | str):
         # if len(child) - cnt_head != 1:
         #     continue
         flaw_line = None
-        flaw_name = cwe
-        path = []
+        name = []
         for grandchild in child:
-            path.append(grandchild.attrib['path'])
+            name.append(grandchild.attrib['path'])
             if len(grandchild) == 1:
                 flaw_line = grandchild[0].attrib['line']
-                flaw_name = grandchild[0].attrib['name']
-        flaws.append({'name': flaw_name, 'line': flaw_line, 'path': path})
-    return flaws
+        cwe_info.append({'line': flaw_line, 'name': name[0]})
+    return cwe_info
+
+
+def save_single_cwe_sample(line: str | int, name: str | list) -> None:
+    """
+    :param line: 漏洞行号
+    :param name: 文件名
+    :return:
+    """
+    if type(name)== list:
+        name = name[0]
+    base_path = '/data/data/ws/sard-parse/C/testcases/' + name[:name.find("__")]
+    file_path = None
+    for root, dirs, files in os.walk(base_path):
+        if name in files:
+            file_path = os.path.join(root, name)
+    if file_path is None:
+        return None
+    with open(file_path, 'r') as f:
+        program = f.read()
+    # TODO: 在替换前需要先标注定位
+    good = re.sub(f"#ifndef OMITBAD.*?#endif /\* OMITBAD \*/", "", program, flags=re.DOTALL)
+    bad = re.sub(f"#ifndef OMITGOOD.*?#endif /\* OMITGOOD \*/", "", program, flags=re.DOTALL)
+    # TODO: 替换注释，换行符等
 
 
 if __name__ == '__main__':
-    for k in cwe_cnt.keys():
-        flaw = extract_single_cwe(k)
-        print(k, len(flaw))
-        for f in flaw:
-            if len(f['path']) > 1:
-                print(f)
+    # save_single_cwe_sample(685, 'CWE15_External_Control_of_System_or_Configuration_Setting__w32_02.c')
+    # print(extract_cwe_info(685))
+    # for k in cwe_cnt.keys():
+    #     flaw = extract_cwe_info(k)
+    #     print(k, len(flaw))
+    #     for f in flaw:
+    #         if len(f['path']) > 1:
+    #             print(f)
+
+    pass
