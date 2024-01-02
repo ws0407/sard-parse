@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import os
 import re
+from typing import List
+import codecs
 
 # CWE编号：样本数量
 cwe_cnt = {'122': 3486, '121': 3048, '78': 2800, '190': 2448, '762': 2072, '191': 1860, '134': 1680, '590': 1675,
@@ -16,6 +18,23 @@ cwe_cnt = {'122': 3486, '121': 3048, '78': 2800, '190': 2448, '762': 2072, '191'
            '478': 18, '479': 18, '480': 18, '481': 18, '482': 18, '484': 18, '526': 18, '587': 18, '605': 18, '615': 18,
            '620': 18, '667': 18, '676': 18, '685': 18, '688': 18, '780': 18, '785': 18, '832': 18, '570': 16, '571': 16,
            '835': 6, '562': 3, '561': 2, '674': 2, '440': 1}
+
+
+def find_nth_str(s, sub, n, index=-1):
+    """
+    递归查找子字符串在字符串中第n次出现的位置（不包含字串重复，如ababa中没有第二次出现aba）
+    :param s: 原始字符串
+    :param sub: 子字符串
+    :param n: 第n次出现的位置
+    :param index: 当前查找的起始位置
+    :return: 子字符串在字符串中第n次出现的位置，如果子字符串未出现n次，则返回-1
+    """
+    if n == 0:
+        return index
+    index = s.find(sub, index + len(sub))
+    if index == -1:
+        return -1
+    return find_nth_str(s, sub, n - 1, index)
 
 
 def count_samples():
@@ -37,9 +56,9 @@ def count_samples():
 
 
 def extract_cwe_info(cwe: int | str) -> list[dict]:
-    """将
+    """
     :param cwe: CWE编号
-    :return:
+    :return: 从xml中提取的所有cwe信息（漏洞位置 + 文件名）
     """
     tree = ET.parse('/data/data/ws/sard-parse/C/manifest.xml')
     root = tree.getroot()
@@ -60,13 +79,13 @@ def extract_cwe_info(cwe: int | str) -> list[dict]:
         name = []
         for grandchild in child:
             name.append(grandchild.attrib['path'])
-            if len(grandchild) == 1:
+            if len(grandchild) >= 1:
                 flaw_line = grandchild[0].attrib['line']
         cwe_info.append({'line': flaw_line, 'name': name[0]})
     return cwe_info
 
 
-def save_single_cwe_sample(line: str | int, name: str | list) -> None:
+def save_single_cwe_sample(line: int, name: str | list) -> None:
     """
     :param line: 漏洞行号
     :param name: 文件名
@@ -83,13 +102,32 @@ def save_single_cwe_sample(line: str | int, name: str | list) -> None:
         return None
     with open(file_path, 'r') as f:
         program = f.read()
-    # TODO: 在替换前需要先标注定位
+    # 在替换前用***标注定位
+    flaw_start = find_nth_str(program, '\n', line-1)
+    program =  program[:flaw_start+1] + '***' + program[flaw_start+1:]
+    if program.find('#ifdef INCLUDEMAIN'):
+        program = (program[:program.find("#ifdef INCLUDEMAIN")] +
+                   re.sub(f"#endif", "", program[program.find("#ifdef INCLUDEMAIN") + 18:]))
+    # 去除注释
+    program = re.sub(r'(/\*([^*]|(\*+[^*/]))*\*+/)|(//.*)', '', program)
+    # 分割good和bad
     good = re.sub(f"#ifndef OMITBAD.*?#endif /\* OMITBAD \*/", "", program, flags=re.DOTALL)
     bad = re.sub(f"#ifndef OMITGOOD.*?#endif /\* OMITGOOD \*/", "", program, flags=re.DOTALL)
-    # TODO: 替换注释，换行符等
+    # 去除多余的换行符
+    good = re.sub(f"\n+", "\n", good)
+    bad = re.sub(f"\n+", "\n", bad)
+    # TODO: 更换函数名
+
+
+
 
 
 if __name__ == '__main__':
+
+    # s = "ababababab"
+    # sub = "aba"
+    # n = 2
+    # print(find_nth_str(s, sub, n, -len(sub)))
     # save_single_cwe_sample(685, 'CWE15_External_Control_of_System_or_Configuration_Setting__w32_02.c')
     # print(extract_cwe_info(685))
     # for k in cwe_cnt.keys():
