@@ -1,0 +1,129 @@
+/data/data/ws/anaconda3/envs/sard/bin/python3 /data/data/ws/sard-parse/tmp.py
+[cwe] 122 done
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_21.c
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_42.c
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_43.cpp
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_21.c
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_42.c
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_43.cpp
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_memmove_21.c
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_memmove_42.c
+[file] not exist: CWE121_Stack_Based_Buffer_Overflow__CWE131_memmove_43.cpp
+[cwe] 121 done
+[cwe] 78 done
+[cwe] 190 done
+[cwe] 762 done
+[cwe] 191 done
+[cwe] 134 done
+[cwe] 590 done
+[cwe] 23 done
+[cwe] 36 done
+[cwe] 124 done
+[cwe] 127 done
+[cwe] 401 done
+[cwe] 126 done
+[cwe] 457 done
+[cwe] 253 done
+[cwe] 194 done
+[cwe] 195 done
+[cwe] 252 done
+[cwe] 758 done
+[cwe] 415 done
+[cwe] 690 done
+[cwe] 789 done
+[cwe] 197 done
+[cwe] 369 done
+[cwe] 400 done
+[cwe] 416 done
+[cwe] 563 done
+[cwe] 114 done
+[cwe] 680 done
+[cwe] 761 done
+[cwe] 427 done
+[cwe] 606 done
+[cwe] 90 done
+[cwe] 272 done
+[cwe] 476 done
+[cwe] 404 done
+[cwe] 284 done
+[cwe] 617 done
+[cwe] 398 done
+[cwe] 506 done
+[cwe] 377 done
+[cwe] 319 done
+[cwe] 426 done
+[cwe] 665 done
+[cwe] 675 done
+[cwe] 390 done
+[cwe] 546 done
+[cwe] 666 done
+[cwe] 123 done
+[cwe] 773 done
+[cwe] 775 done
+[cwe] 226 done
+[cwe] 244 done
+[cwe] 325 done
+[cwe] 511 done
+[cwe] 510 done
+[cwe] 256 done
+[cwe] 259 done
+[cwe] 321 done
+[cwe] 591 done
+[cwe] 327 done
+[cwe] 328 done
+[cwe] 391 done
+[cwe] 396 done
+[cwe] 467 done
+[cwe] 681 done
+[cwe] 588 done
+[cwe] 843 done
+[cwe] 468 done
+[cwe] 188 done
+[cwe] 273 done
+[cwe] 366 done
+[cwe] 367 done
+[cwe] 459 done
+[cwe] 469 done
+[cwe] 475 done
+[cwe] 534 done
+[cwe] 535 done
+[cwe] 15 done
+[cwe] 176 done
+[cwe] 464 done
+[cwe] 672 done
+[cwe] 397 done
+[cwe] 483 done
+[cwe] 196 done
+[cwe] 222 done
+[cwe] 223 done
+[cwe] 242 done
+[cwe] 247 done
+[cwe] 338 done
+[cwe] 364 done
+[cwe] 478 done
+[cwe] 479 done
+[cwe] 480 done
+[cwe] 481 done
+[cwe] 482 done
+[cwe] 484 done
+[cwe] 526 done
+[cwe] 587 done
+[cwe] 605 done
+[cwe] 615 done
+[cwe] 620 done
+[cwe] 667 done
+[cwe] 676 done
+[cwe] 685 done
+[cwe] 688 done
+[cwe] 780 done
+[cwe] 785 done
+[cwe] 832 done
+[cwe] 570 done
+[cwe] 571 done
+[cwe] 835 done
+[cwe] 562 done
+[cwe] 561 done
+[cwe] 674 done
+[cwe] 440 done
+
+进程已结束，退出代码为 0

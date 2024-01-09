@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import os
 import re
+import tqdm
+import json
 from typing import List
 import codecs
 
@@ -85,45 +87,175 @@ def extract_cwe_info(cwe: int | str) -> list[dict]:
     return cwe_info
 
 
-def save_single_cwe_sample(line: int, name: str | list) -> None:
+def split_good(program: str) -> list[str]:
+    """
+    1. 提取出good函数名列表
+    2. 针对每个good函数，删除其他good函数内容，并将主函数中calling good换成此good函数
+    :param program:
+    :return:
+    """
+    program = program.replace(' \n', '\n')
+    # 1. 提取出good函数名列表出good函数名列表
+    s_str = 'printLine("Calling good()...");'
+    e_str = 'printLine("Finished good()");'
+    start = program.find(s_str) + len(s_str)
+    end = program.find(e_str)
+    main_good_name = [_ for _ in program[start:end].split('\n') if not (_.isspace() or len(_) == 0)][0]
+    main_good_name = main_good_name.replace(' ', '').replace(';', '')  # good()
+    s_str = main_good_name + '\n{'
+    start = program.find(s_str) + len(s_str)
+    end = program.find('\n}', start)
+    good_func_list = [_.replace(' ', '').replace(';', '')
+                      for _ in program[start:end].split('\n') if not (_.isspace() or len(_) == 0)]
+    good_program_list = []
+    start = program[:start - 2].rfind('\n')
+    program = program[:start] + program[end + 2:]
+    for good_func in good_func_list:
+        good_program = program.replace(main_good_name, good_func)  # good1()
+        for other_good_func in good_func_list:
+            if other_good_func != good_func:
+                start = good_program.find(other_good_func + '\n{')
+                start = good_program[:start].rfind('\n')
+                end = good_program.find('\n}', start)
+                good_program = good_program[:start] + good_program[end + 2:]
+        good_program_list.append(re.sub(f"\n+", "\n", good_program))
+    return good_program_list
+
+
+def save_single_cwe_sample(line: int | str | None, name: str | list, out_path: str) -> bool:
     """
     :param line: 漏洞行号
     :param name: 文件名
+    :param out_path: 输出路径
     :return:
     """
-    if type(name)== list:
-        name = name[0]
+    # 输出json的路径
+    out_path = '{}/{}'.format(out_path, name[:name.find('__')])
+    json_path = '{}/{}.json'.format(out_path, name[:name.find('.')])
+    if not os.path.exists(out_path):
+        os.makedirs(out_path)
+    elif os.path.exists(json_path):
+        return True
+
+    # 搜索文件位置
     base_path = '/data/data/ws/sard-parse/C/testcases/' + name[:name.find("__")]
     file_path = None
     for root, dirs, files in os.walk(base_path):
         if name in files:
             file_path = os.path.join(root, name)
+            break
     if file_path is None:
-        return None
+        print('[file] not exist:', name)
+        return False
+
+    # 漏洞行号
+    try:
+        line = int(line)
+    except Exception as e:
+        print('[error]', e, name)
+        return False
+
+    # 暂时只考虑单文件的样本
+    if type(name) == list:
+        name = name[0]
+
     with open(file_path, 'r') as f:
         program = f.read()
     # 在替换前用***标注定位
-    flaw_start = find_nth_str(program, '\n', line-1)
-    program =  program[:flaw_start+1] + '***' + program[flaw_start+1:]
+    flaw_start = find_nth_str(program, '\n', line - 1)
+    program = program[:flaw_start + 1] + '***' + program[flaw_start + 1:]
     if program.find('#ifdef INCLUDEMAIN'):
         program = (program[:program.find("#ifdef INCLUDEMAIN")] +
-                   re.sub(f"#endif", "", program[program.find("#ifdef INCLUDEMAIN") + 18:]))
-    # 去除注释
-    program = re.sub(r'(/\*([^*]|(\*+[^*/]))*\*+/)|(//.*)', '', program)
+                   re.sub(f"\n\n#endif", "", program[program.rfind("#ifdef INCLUDEMAIN") + 18:]))
+
+    # 去除宏定义，如#ifdef _WIN32中的内容，默认在linux执行
+    program = re.sub(r'(#ifdef _WIN32)(.*?)(#else)(.*?)(#endif)',
+                     lambda match: match.group(4), program, flags=re.DOTALL)
+    program = re.sub(r'(#ifdef _WIN32)(.*?)(#endif)', '', program, flags=re.DOTALL)
+
     # 分割good和bad
     good = re.sub(f"#ifndef OMITBAD.*?#endif /\* OMITBAD \*/", "", program, flags=re.DOTALL)
+    good = good.replace('#ifndef OMITGOOD', '').replace('#endif /* OMITGOOD */', '')
     bad = re.sub(f"#ifndef OMITGOOD.*?#endif /\* OMITGOOD \*/", "", program, flags=re.DOTALL)
+    bad = bad.replace('#ifndef OMITBAD', '').replace('#endif /* OMITBAD */', '')
+
+    # 多个good分离开来，另外把多标注的***定位去除
+    good = [_.replace('***', '', 1) for _ in split_good(good)]
+
+    # 去除注释
+    good = [re.sub(r'(/\*([^*]|(\*+[^*/]))*\*+/)|(//.*)', '', _) for _ in good]
+    bad = re.sub(r'(/\*([^*]|(\*+[^*/]))*\*+/)|(//.*)', '', bad)
+
+    # 利用re去除printLine语句，如果printLine中只有常量字符串
+    good = [re.sub(r'printLine\("([^"\\\n]|\\.|\\\n)*"\);', '', _) for _ in good]
+    bad = re.sub(r'printLine\("([^"\\\n]|\\.|\\\n)*"\);', '', bad)
     # 去除多余的换行符
-    good = re.sub(f"\n+", "\n", good)
-    bad = re.sub(f"\n+", "\n", bad)
-    # TODO: 更换函数名
+    good = [re.sub(f"\n(\s*)+\n", "\n", _) for _ in good]
+    good = [_[1:] if _[0] == '\n' else _ for _ in good]
+    bad = re.sub(f"\n(\s*)+\n", "\n", bad)
+    bad = bad[1:] if bad[0] == '\n' else bad
+
+    # 标注
+    line = bad[:bad.find('***')].count('\n') + 1
+    bad = bad.replace('***', '', 1)
+    output = {
+        'line': line,
+        'type': name[name.find('.') + 1:],
+        'bad': bad,
+        'good': good
+    }
+    try:
+        with open(json_path, 'w') as f:
+            json.dump(output, f)
+    except Exception as e:
+        print('[error]', e, name)
+        return False
+    return True
 
 
+def process_data():
+    for cwe in cwe_cnt.keys():
+        flaw = extract_cwe_info(cwe)
+        cnt = 0
+        for f in tqdm.tqdm(flaw):
+            res = save_single_cwe_sample(f['line'], f['name'], '/data/data/ws/sard-parse/output')
+            cnt = cnt + 1 if res else cnt
+        print('[cwe]', cwe, 'success:', cnt, 'fail:', len(flaw) - cnt)
 
+
+def gen_std_program(program) -> str:
+    """自定义变量、函数匿名化
+    1.查找所有自定义的变量、函数（根据数据类型、返回值类型定位）
+    2.匹配所有上述变量、函数进行替换（非字母）
+    3.替换成VAR1,2,3..., FUNC1,2,3...
+
+    # 函数: type func_name(...){}
+    # 类: class
+    # 结构体: struct s_name {}
+    # 结构体指针：
+    # namespace xxx
+    # goto: goto address_name
+    # 变量: type var_name[ = ; ...
+    # type: 可跟 *，表示指针
+
+    :param program:
+    :return:
+
+    """
+
+    # type
+    type_set = frozenset(
+        {'int', 'char', 'double', 'float', 'void', 'short', 'long', 'unsigned', 'struct', 'union', 'enum', })
+    # holds known non-user-defined functions; immutable set
+    main_set = frozenset({'main'})
+    # arguments in main function; immutable set
+    main_args = frozenset({'argc', 'argv'})
+
+    return program
 
 
 if __name__ == '__main__':
-
+    process_data()
     # s = "ababababab"
     # sub = "aba"
     # n = 2
