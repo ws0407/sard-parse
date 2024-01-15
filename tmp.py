@@ -172,9 +172,7 @@ def test_std_program(program: str) -> None:
                 'static_cast', 'struct', 'template','thread_local', 'throw',
                 'typedef', 'typeid', 'typename', 'union', 'unsigned', 'virtual', 'void', 'volatile',
                 'wchar_t', }
-    test_keys = {
-        'struct *', 'struct*', 'struct  *'
-    }
+
     for cwe in cwe_cnt.keys():
         flaw = extract_cwe_info(cwe)
         exist_key = []
@@ -185,13 +183,14 @@ def test_std_program(program: str) -> None:
                 if f['name'] in files:
                     file_path = os.path.join(root, f['name'])
             if file_path is None:
-                print('[file] not exist:', f['name'])
+                # print('[file] not exist:', f['name'])
                 continue
             with open(file_path, 'r') as f1:
                 program = str(f1.read())
-            for key in test_keys:
-                if key in program:
-                    print('[key]', key, f['name'])
+            program = re.sub(r'(/\*([^*]|(\*+[^*/]))*\*+/)|(//.*)', '', program)
+
+            if 'typedef' in program and 'typedef union' not in program and 'typedef struct' not in program:
+                print(file_path)
         print('[cwe]', cwe, exist_key)
 
 

@@ -99,6 +99,8 @@ def split_good(program: str) -> list[str]:
     s_str = 'printLine("Calling good()...");'
     e_str = 'printLine("Finished good()");'
     start = program.find(s_str) + len(s_str)
+    if start == 30:
+        return []
     end = program.find(e_str)
     main_good_name = [_ for _ in program[start:end].split('\n') if not (_.isspace() or len(_) == 0)][0]
     main_good_name = main_good_name.replace(' ', '').replace(';', '')  # good()
@@ -134,7 +136,10 @@ def save_single_cwe_sample(line: int | str | None, name: str | list, out_path: s
     json_path = '{}/{}.json'.format(out_path, name[:name.find('.')])
     if not os.path.exists(out_path):
         os.makedirs(out_path)
-    elif os.path.exists(json_path):
+    if os.path.exists(json_path):
+        # with open(json_path, 'r') as f:
+        #     json_file = json.dumps(json.load(f))
+        # if '_WIN32' not in json_file:
         return True
 
     # 搜索文件位置
@@ -168,10 +173,19 @@ def save_single_cwe_sample(line: int | str | None, name: str | list, out_path: s
         program = (program[:program.find("#ifdef INCLUDEMAIN")] +
                    re.sub(f"\n\n#endif", "", program[program.rfind("#ifdef INCLUDEMAIN") + 18:]))
 
-    # 去除宏定义，如#ifdef _WIN32中的内容，默认在linux执行
+    # 去除宏定义，如#ifdef/ifndef _WIN32中的内容，默认在linux执行
     program = re.sub(r'(#ifdef _WIN32)(.*?)(#else)(.*?)(#endif)',
-                     lambda match: match.group(4), program, flags=re.DOTALL)
+                     lambda match: match.group(4)
+                     if re.compile(r'^((?!.+#endif).)+', flags=re.DOTALL).match(match.group(2))
+                     else ''.join([match.group(_) for _ in range(1, 6)]),
+                     program, flags=re.DOTALL)
     program = re.sub(r'(#ifdef _WIN32)(.*?)(#endif)', '', program, flags=re.DOTALL)
+    program = re.sub(r'(#ifndef _WIN32)(.*?)(#else)(.*?)(#endif)',
+                     lambda match: match.group(4)
+                     if re.compile(r'^((?!.+#endif).)+', flags=re.DOTALL).match(match.group(2))
+                     else ''.join([match.group(_) for _ in range(1, 6)]),
+                     program, flags=re.DOTALL)
+    program = re.sub(r'(#ifndef _WIN32)(.*?)(#endif)', lambda match: match.group(2), program, flags=re.DOTALL)
 
     # 分割good和bad
     good = re.sub(f"#ifndef OMITBAD.*?#endif /\* OMITBAD \*/", "", program, flags=re.DOTALL)
@@ -190,9 +204,9 @@ def save_single_cwe_sample(line: int | str | None, name: str | list, out_path: s
     good = [re.sub(r'printLine\("([^"\\\n]|\\.|\\\n)*"\);', '', _) for _ in good]
     bad = re.sub(r'printLine\("([^"\\\n]|\\.|\\\n)*"\);', '', bad)
     # 去除多余的换行符
-    good = [re.sub(f"\n(\s*)+\n", "\n", _) for _ in good]
+    good = [re.sub(f"\n(\s*)\n", "\n", _) for _ in good]
     good = [_[1:] if _[0] == '\n' else _ for _ in good]
-    bad = re.sub(f"\n(\s*)+\n", "\n", bad)
+    bad = re.sub(f"\n(\s*)\n", "\n", bad)
     bad = bad[1:] if bad[0] == '\n' else bad
 
     # 标注
@@ -215,10 +229,12 @@ def save_single_cwe_sample(line: int | str | None, name: str | list, out_path: s
 
 def process_data():
     for cwe in cwe_cnt.keys():
+        # if cwe in ['122', '121', '78', '190', '762', '191', '134', '590', '23']:
+        #     continue
         flaw = extract_cwe_info(cwe)
         cnt = 0
-        for f in tqdm.tqdm(flaw):
-            res = save_single_cwe_sample(f['line'], f['name'], '/data/data/ws/sard-parse/output')
+        for f in tqdm.tqdm(flaw, desc=f'[CWE{cwe}]'):
+            res = save_single_cwe_sample(f['line'], f['name'], '/data/data/ws/sard-parse/output/clean')
             cnt = cnt + 1 if res else cnt
         print('[cwe]', cwe, 'success:', cnt, 'fail:', len(flaw) - cnt)
 
@@ -231,8 +247,8 @@ def gen_std_program(program) -> str:
 
     # 函数: type func_name(...){}
     # 类: class
-    # 结构体: struct s_name {}
-    # 结构体指针：
+    # struct: typedef struct s_name {} xxx 已验证所有的struct都带有typedef
+    # typedef: 已验证所有的typedef只有struct和union
     # namespace xxx
     # goto: goto address_name
     # 变量: type var_name[ = ; ...
@@ -242,20 +258,86 @@ def gen_std_program(program) -> str:
     :return:
 
     """
+    type_set = ['int', '_int16', '_int32', '_int64', '_int8', '__int16', '__int32', '__int64', '__int8',
+                'char', 'char16_t', 'char32_t', 'wchar_t', 'void', 'short', 'float', 'double', 'long']
 
-    # type
-    type_set = frozenset(
-        {'int', 'char', 'double', 'float', 'void', 'short', 'long', 'unsigned', 'struct', 'union', 'enum', })
-    # holds known non-user-defined functions; immutable set
-    main_set = frozenset({'main'})
-    # arguments in main function; immutable set
-    main_args = frozenset({'argc', 'argv'})
+    others_set = ['namespace', 'goto']
+
+    # 识别class，替换， # 加入type_set(暂时不用)
+    re_class = re.compile(r'(\W)(class)(\s+)([_A-Za-z]\w*)(\W)')
+    class_names = [_[3] for _ in re_class.findall(program)]
+    for i, class_name in enumerate(class_names):
+        re_class_name = re.compile(r'(\W)(' + class_name + r')(\W)')
+        program = re.sub(re_class_name, lambda m: m.group(1) + 'CLASS' + str(i + 1) + m.group(3), program)
+        # type_set.append('CLASS' + str(i+1))
+
+    # 识别struct，替换，加入type_set
+    re_struct = re.compile(r'(\W)(struct)(\s+)([_A-Za-z]\w*)(\s*?)({)(.*?)(})(\s*?)([_A-Za-z].*?)(;)', flags=re.DOTALL)
+    struct_all = re_struct.findall(program)
+    struct_names = [_[3] for _ in struct_all]
+    for i, struct_name in enumerate(struct_names):
+        re_struct_name = re.compile(r'(\W)(' + struct_name + r')(\W)')
+        program = re.sub(re_struct_name, lambda m: m.group(1) + 'STRUCT' + str(i + 1) + m.group(3), program)
+        type_set.append('STRUCT' + str(i + 1))
+
+    # 识别typedef，替换，加入type_set
+    re_typedef = re.compile(r'(\W)(typedef)(.*?)(})(\s*?)([_A-Za-z].*?)(;)', flags=re.DOTALL)
+    typedef_names = [_[-2] for _ in re_typedef.findall(program)]
+    for i, typedef_name in enumerate(typedef_names):
+        re_typedef_name = re.compile(r'(\W)(' + typedef_name + r')(\W)')
+        program = re.sub(re_typedef_name, lambda m: m.group(1) + 'TYPEDEF' + str(i + 1) + m.group(3), program)
+        type_set.append('TYPEDEF' + str(i + 1))
+
+    # namespace，goto，替换
+    re_others = re.compile(r'(\W)(' + '|'.join(others_set) + r')(\s+)([_A-Za-z]\w*)(\W)')
+    others_names = [_[-2] for _ in re_others.findall(program)]
+    for i, others_name in enumerate(others_names):
+        re_others_name = re.compile(r'(\W)(' + others_name + r')(\W)')
+        program = re.sub(re_others_name, lambda m: m.group(1) + 'OTHERS' + str(i + 1) + m.group(3), program)
+
+    # 识别函数定义，替换
+    re_func = re.compile(r'(\W)(' + '|'.join(type_set) + r')(\s+)([_A-Za-z]\w*)(\s*?)(\()(.*?)(\))(\s*?)({)(.*?)(})',
+                         flags=re.DOTALL)
+    func_names = [_[3] for _ in re_func.findall(program) if _[3] != 'main']
+    std_func_names = []
+    for i, func_name in enumerate(func_names):
+        re_func_name = re.compile(r'(\W)(' + func_name + r')(\W)')
+        program = re.sub(re_func_name, lambda m: m.group(1) + 'FUNC' + str(i + 1) + m.group(3), program)
+        std_func_names.append('FUNC' + str(i + 1))
+
+    # type，这些词定义的变量都需要替换，这些词后面有 * （指针），也需要替换
+    re_type = re.compile(r'(\W)(' + '|'.join(type_set) + r')((\s+)|(\s*?\*\s*?))([_A-Za-z]\w*)(\W)')
+    var_names = [_[-2] for _ in re_type.findall(program) if _[-2] not in ['main', 'argc', 'argv'] + std_func_names]
+    for i, var_name in enumerate(var_names):
+        re_var_name = re.compile(r'(\W)(' + var_name + r')(\W)')
+        program = re.sub(re_var_name, lambda m: m.group(1) + 'VAR' + str(i + 1) + m.group(3), program)
 
     return program
 
 
+def std_all(in_path='/data/data/ws/sard-parse/output/clean', out_path='/data/data/ws/sard-parse/output/std'):
+    for root, dirs, files in os.walk(in_path):
+        for file in tqdm.tqdm(files):
+            file_path = os.path.join(root, file)
+            with open(file_path, 'r') as f:
+                sample = json.load(f)
+            sample['bad'] = gen_std_program(sample['bad'])
+            sample['good'] = [gen_std_program(_) for _ in sample['good']]
+            out_file_path = '{}/{}'.format(out_path, root[root.rfind('/') + 1:])
+            if not os.path.exists(out_file_path):
+                os.makedirs(out_file_path)
+            with open('{}/{}'.format(out_file_path, file), 'w') as f:
+                json.dump(sample, f)
+        print(root, 'done')
+
+
 if __name__ == '__main__':
-    process_data()
+    std_all()
+    # process_data()
+    # p = '''#include \"std_testcase.h\"\n#ifndef _WIN32\n#include <wchar.h>\n#endif\n#define SRC_STR \"0123456789abcdef0123456789abcde\"\ntypedef struct _charVoid\n{\n    char charFirst[16];\n    void * voidSecond;\n    void * voidThird;\n} charVoid;\nvoid CWE121_Stack_Based_Buffer_Overflow__char_type_overrun_memcpy_02_bad()\n{\n    if(1)\n    {\n        {\n            charVoid structCharVoid;\n            structCharVoid.voidSecond = (void *)SRC_STR;\n            printLine((char *)structCharVoid.voidSecond);\n            memcpy(structCharVoid.charFirst, SRC_STR, sizeof(structCharVoid));\n            structCharVoid.charFirst[(sizeof(structCharVoid.charFirst)/sizeof(char))-1] = '\\0'; \n            printLine((char *)structCharVoid.charFirst);\n            printLine((char *)structCharVoid.voidSecond);\n        }\n    }\n}\nint main(int argc, char * argv[])\n{\n    srand( (unsigned)time(NULL) );\n    CWE121_Stack_Based_Buffer_Overflow__char_type_overrun_memcpy_02_bad();\n    return 0;\n}\n'''
+    # print(p)
+    # print(gen_std_program(p))
+
     # s = "ababababab"
     # sub = "aba"
     # n = 2

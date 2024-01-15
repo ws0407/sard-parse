@@ -1,0 +1,239 @@
+/data/data/ws/anaconda3/envs/sard/bin/python3 /data/data/ws/sard-parse/utils.py
+0it [00:00, ?it/s]
+/data/data/ws/sard-parse/output/clean done
+100%|██████████████████████████████████████| 3039/3039 [00:03<00:00, 908.27it/s]
+/data/data/ws/sard-parse/output/clean/CWE121_Stack_Based_Buffer_Overflow done
+100%|██████████████████████████████████████| 3485/3485 [00:04<00:00, 804.98it/s]
+/data/data/ws/sard-parse/output/clean/CWE122_Heap_Based_Buffer_Overflow done
+100%|██████████████████████████████████████| 1680/1680 [00:05<00:00, 329.28it/s]
+/data/data/ws/sard-parse/output/clean/CWE134_Uncontrolled_Format_String done
+100%|██████████████████████████████████████| 2448/2448 [00:03<00:00, 721.33it/s]
+/data/data/ws/sard-parse/output/clean/CWE190_Integer_Overflow done
+100%|██████████████████████████████████████| 1860/1860 [00:02<00:00, 718.34it/s]
+/data/data/ws/sard-parse/output/clean/CWE191_Integer_Underflow done
+100%|██████████████████████████████████████| 1400/1400 [00:02<00:00, 615.13it/s]
+/data/data/ws/sard-parse/output/clean/CWE23_Relative_Path_Traversal done
+100%|█████████████████████████████████████| 1675/1675 [00:01<00:00, 1049.99it/s]
+/data/data/ws/sard-parse/output/clean/CWE590_Free_Memory_Not_on_Heap done
+100%|██████████████████████████████████████| 2072/2072 [00:02<00:00, 913.33it/s]
+/data/data/ws/sard-parse/output/clean/CWE762_Mismatched_Memory_Management_Routines done
+100%|██████████████████████████████████████| 2800/2800 [00:04<00:00, 697.66it/s]
+/data/data/ws/sard-parse/output/clean/CWE78_OS_Command_Injection done
+100%|██████████████████████████████████████| 1400/1400 [00:02<00:00, 616.33it/s]
+/data/data/ws/sard-parse/output/clean/CWE36_Absolute_Path_Traversal done
+100%|██████████████████████████████████████| 1228/1228 [00:01<00:00, 785.24it/s]
+/data/data/ws/sard-parse/output/clean/CWE124_Buffer_Underwrite done
+100%|██████████████████████████████████████| 1228/1228 [00:01<00:00, 851.75it/s]
+/data/data/ws/sard-parse/output/clean/CWE127_Buffer_Underread done
+100%|██████████████████████████████████████| 1032/1032 [00:01<00:00, 994.01it/s]
+/data/data/ws/sard-parse/output/clean/CWE401_Memory_Leak done
+100%|████████████████████████████████████████| 912/912 [00:01<00:00, 816.41it/s]
+/data/data/ws/sard-parse/output/clean/CWE126_Buffer_Overread done
+100%|████████████████████████████████████████| 817/817 [00:01<00:00, 641.56it/s]
+/data/data/ws/sard-parse/output/clean/CWE457_Use_of_Uninitialized_Variable done
+100%|███████████████████████████████████████| 684/684 [00:00<00:00, 1306.83it/s]
+/data/data/ws/sard-parse/output/clean/CWE253_Incorrect_Check_of_Function_Return_Value done
+100%|████████████████████████████████████████| 672/672 [00:00<00:00, 752.30it/s]
+/data/data/ws/sard-parse/output/clean/CWE194_Unexpected_Sign_Extension done
+100%|████████████████████████████████████████| 672/672 [00:00<00:00, 790.49it/s]
+/data/data/ws/sard-parse/output/clean/CWE195_Signed_to_Unsigned_Conversion_Error done
+100%|███████████████████████████████████████| 630/630 [00:00<00:00, 1417.79it/s]
+/data/data/ws/sard-parse/output/clean/CWE252_Unchecked_Return_Value done
+100%|███████████████████████████████████████| 581/581 [00:00<00:00, 1155.28it/s]
+/data/data/ws/sard-parse/output/clean/CWE758_Undefined_Behavior done
+100%|███████████████████████████████████████| 560/560 [00:00<00:00, 1052.94it/s]
+/data/data/ws/sard-parse/output/clean/CWE415_Double_Free done
+100%|███████████████████████████████████████| 560/560 [00:00<00:00, 1496.03it/s]
+/data/data/ws/sard-parse/output/clean/CWE690_NULL_Deref_From_Return done
+100%|████████████████████████████████████████| 560/560 [00:01<00:00, 399.33it/s]
+/data/data/ws/sard-parse/output/clean/CWE789_Uncontrolled_Mem_Alloc done
+100%|████████████████████████████████████████| 504/504 [00:00<00:00, 971.74it/s]
+/data/data/ws/sard-parse/output/clean/CWE197_Numeric_Truncation_Error done
+100%|████████████████████████████████████████| 504/504 [00:00<00:00, 619.28it/s]
+/data/data/ws/sard-parse/output/clean/CWE369_Divide_by_Zero done
+100%|████████████████████████████████████████| 420/420 [00:00<00:00, 464.75it/s]
+/data/data/ws/sard-parse/output/clean/CWE400_Resource_Exhaustion done
+100%|████████████████████████████████████████| 398/398 [00:00<00:00, 814.61it/s]
+/data/data/ws/sard-parse/output/clean/CWE416_Use_After_Free done
+100%|███████████████████████████████████████| 366/366 [00:00<00:00, 1515.36it/s]
+/data/data/ws/sard-parse/output/clean/CWE563_Unused_Variable done
+100%|████████████████████████████████████████| 336/336 [00:00<00:00, 790.31it/s]
+/data/data/ws/sard-parse/output/clean/CWE114_Process_Control done
+100%|████████████████████████████████████████| 336/336 [00:00<00:00, 770.62it/s]
+/data/data/ws/sard-parse/output/clean/CWE680_Integer_Overflow_to_Buffer_Overflow done
+100%|████████████████████████████████████████| 336/336 [00:00<00:00, 575.43it/s]
+/data/data/ws/sard-parse/output/clean/CWE761_Free_Pointer_Not_at_Start_of_Buffer done
+100%|████████████████████████████████████████| 280/280 [00:00<00:00, 828.55it/s]
+/data/data/ws/sard-parse/output/clean/CWE427_Uncontrolled_Search_Path_Element done
+100%|████████████████████████████████████████| 280/280 [00:00<00:00, 327.86it/s]
+/data/data/ws/sard-parse/output/clean/CWE606_Unchecked_Loop_Condition done
+100%|████████████████████████████████████████| 280/280 [00:00<00:00, 386.32it/s]
+/data/data/ws/sard-parse/output/clean/CWE90_LDAP_Injection done
+100%|████████████████████████████████████████| 252/252 [00:00<00:00, 969.39it/s]
+/data/data/ws/sard-parse/output/clean/CWE272_Least_Privilege_Violation done
+100%|███████████████████████████████████████| 236/236 [00:00<00:00, 1143.70it/s]
+/data/data/ws/sard-parse/output/clean/CWE476_NULL_Pointer_Dereference done
+100%|███████████████████████████████████████| 224/224 [00:00<00:00, 1224.87it/s]
+/data/data/ws/sard-parse/output/clean/CWE404_Improper_Resource_Shutdown done
+100%|████████████████████████████████████████| 216/216 [00:00<00:00, 985.21it/s]
+/data/data/ws/sard-parse/output/clean/CWE284_Improper_Access_Control done
+100%|███████████████████████████████████████| 186/186 [00:00<00:00, 1181.91it/s]
+/data/data/ws/sard-parse/output/clean/CWE617_Reachable_Assertion done
+100%|███████████████████████████████████████| 181/181 [00:00<00:00, 1719.76it/s]
+/data/data/ws/sard-parse/output/clean/CWE398_Poor_Code_Quality done
+100%|████████████████████████████████████████| 158/158 [00:00<00:00, 729.94it/s]
+/data/data/ws/sard-parse/output/clean/CWE506_Embedded_Malicious_Code done
+100%|████████████████████████████████████████| 144/144 [00:00<00:00, 939.58it/s]
+/data/data/ws/sard-parse/output/clean/CWE377_Insecure_Temporary_File done
+100%|████████████████████████████████████████| 112/112 [00:00<00:00, 132.63it/s]
+/data/data/ws/sard-parse/output/clean/CWE319_Cleartext_Tx_Sensitive_Info done
+100%|███████████████████████████████████████| 112/112 [00:00<00:00, 1220.96it/s]
+/data/data/ws/sard-parse/output/clean/CWE426_Untrusted_Search_Path done
+100%|███████████████████████████████████████| 112/112 [00:00<00:00, 1139.73it/s]
+/data/data/ws/sard-parse/output/clean/CWE665_Improper_Initialization done
+100%|███████████████████████████████████████| 112/112 [00:00<00:00, 1089.90it/s]
+/data/data/ws/sard-parse/output/clean/CWE675_Duplicate_Operations_on_Resource done
+100%|██████████████████████████████████████████| 90/90 [00:00<00:00, 708.46it/s]
+/data/data/ws/sard-parse/output/clean/CWE390_Error_Without_Action done
+100%|█████████████████████████████████████████| 90/90 [00:00<00:00, 2260.15it/s]
+/data/data/ws/sard-parse/output/clean/CWE546_Suspicious_Comment done
+100%|██████████████████████████████████████████| 90/90 [00:00<00:00, 335.87it/s]
+/data/data/ws/sard-parse/output/clean/CWE666_Operation_on_Resource_in_Wrong_Phase_of_Lifetime done
+100%|██████████████████████████████████████████| 84/84 [00:00<00:00, 449.76it/s]
+/data/data/ws/sard-parse/output/clean/CWE123_Write_What_Where_Condition done
+100%|██████████████████████████████████████████| 84/84 [00:00<00:00, 875.07it/s]
+/data/data/ws/sard-parse/output/clean/CWE773_Missing_Reference_to_Active_File_Descriptor_or_Handle done
+100%|██████████████████████████████████████████| 84/84 [00:00<00:00, 989.29it/s]
+/data/data/ws/sard-parse/output/clean/CWE775_Missing_Release_of_File_Descriptor_or_Handle done
+100%|██████████████████████████████████████████| 72/72 [00:00<00:00, 591.46it/s]
+/data/data/ws/sard-parse/output/clean/CWE226_Sensitive_Information_Uncleared_Before_Release done
+100%|██████████████████████████████████████████| 72/72 [00:00<00:00, 525.08it/s]
+/data/data/ws/sard-parse/output/clean/CWE244_Heap_Inspection done
+100%|██████████████████████████████████████████| 72/72 [00:00<00:00, 414.29it/s]
+/data/data/ws/sard-parse/output/clean/CWE325_Missing_Required_Cryptographic_Step done
+100%|█████████████████████████████████████████| 72/72 [00:00<00:00, 1374.59it/s]
+/data/data/ws/sard-parse/output/clean/CWE511_Logic_Time_Bomb done
+100%|██████████████████████████████████████████| 70/70 [00:00<00:00, 713.51it/s]
+/data/data/ws/sard-parse/output/clean/CWE510_Trapdoor done
+100%|██████████████████████████████████████████| 56/56 [00:00<00:00, 172.54it/s]
+/data/data/ws/sard-parse/output/clean/CWE256_Plaintext_Storage_of_Password done
+100%|██████████████████████████████████████████| 56/56 [00:00<00:00, 672.60it/s]
+/data/data/ws/sard-parse/output/clean/CWE259_Hard_Coded_Password done
+100%|██████████████████████████████████████████| 56/56 [00:00<00:00, 442.57it/s]
+/data/data/ws/sard-parse/output/clean/CWE321_Hard_Coded_Cryptographic_Key done
+100%|██████████████████████████████████████████| 56/56 [00:00<00:00, 710.26it/s]
+/data/data/ws/sard-parse/output/clean/CWE591_Sensitive_Data_Storage_in_Improperly_Locked_Memory done
+100%|██████████████████████████████████████████| 54/54 [00:00<00:00, 376.99it/s]
+/data/data/ws/sard-parse/output/clean/CWE327_Use_Broken_Crypto done
+100%|██████████████████████████████████████████| 54/54 [00:00<00:00, 326.30it/s]
+/data/data/ws/sard-parse/output/clean/CWE328_Reversible_One_Way_Hash done
+100%|█████████████████████████████████████████| 54/54 [00:00<00:00, 1314.32it/s]
+/data/data/ws/sard-parse/output/clean/CWE391_Unchecked_Error_Condition done
+100%|██████████████████████████████████████████| 54/54 [00:00<00:00, 987.11it/s]
+/data/data/ws/sard-parse/output/clean/CWE396_Catch_Generic_Exception done
+100%|█████████████████████████████████████████| 54/54 [00:00<00:00, 1396.11it/s]
+/data/data/ws/sard-parse/output/clean/CWE467_Use_of_sizeof_on_Pointer_Type done
+100%|██████████████████████████████████████████| 54/54 [00:00<00:00, 831.52it/s]
+/data/data/ws/sard-parse/output/clean/CWE681_Incorrect_Conversion_Between_Numeric_Types done
+100%|█████████████████████████████████████████| 50/50 [00:00<00:00, 1245.89it/s]
+/data/data/ws/sard-parse/output/clean/CWE588_Attempt_to_Access_Child_of_Non_Structure_Pointer done
+100%|█████████████████████████████████████████| 50/50 [00:00<00:00, 1514.77it/s]
+/data/data/ws/sard-parse/output/clean/CWE843_Type_Confusion done
+100%|██████████████████████████████████████████| 37/37 [00:00<00:00, 910.29it/s]
+/data/data/ws/sard-parse/output/clean/CWE468_Incorrect_Pointer_Scaling done
+100%|█████████████████████████████████████████| 36/36 [00:00<00:00, 1131.81it/s]
+/data/data/ws/sard-parse/output/clean/CWE188_Reliance_on_Data_Memory_Layout done
+100%|█████████████████████████████████████████| 36/36 [00:00<00:00, 1053.37it/s]
+/data/data/ws/sard-parse/output/clean/CWE273_Improper_Check_for_Dropped_Privileges done
+100%|██████████████████████████████████████████| 36/36 [00:00<00:00, 467.86it/s]
+/data/data/ws/sard-parse/output/clean/CWE366_Race_Condition_Within_Thread done
+100%|██████████████████████████████████████████| 36/36 [00:00<00:00, 646.15it/s]
+/data/data/ws/sard-parse/output/clean/CWE367_TOC_TOU done
+100%|██████████████████████████████████████████| 36/36 [00:00<00:00, 995.50it/s]
+/data/data/ws/sard-parse/output/clean/CWE459_Incomplete_Cleanup done
+100%|█████████████████████████████████████████| 36/36 [00:00<00:00, 1025.73it/s]
+/data/data/ws/sard-parse/output/clean/CWE469_Use_of_Pointer_Subtraction_to_Determine_Size done
+100%|█████████████████████████████████████████| 36/36 [00:00<00:00, 1319.96it/s]
+/data/data/ws/sard-parse/output/clean/CWE475_Undefined_Behavior_for_Input_to_API done
+100%|██████████████████████████████████████████| 36/36 [00:00<00:00, 558.63it/s]
+/data/data/ws/sard-parse/output/clean/CWE534_Info_Exposure_Debug_Log done
+100%|██████████████████████████████████████████| 36/36 [00:00<00:00, 618.92it/s]
+/data/data/ws/sard-parse/output/clean/CWE535_Info_Exposure_Shell_Error done
+100%|██████████████████████████████████████████| 28/28 [00:00<00:00, 628.24it/s]
+/data/data/ws/sard-parse/output/clean/CWE15_External_Control_of_System_or_Configuration_Setting done
+100%|██████████████████████████████████████████| 28/28 [00:00<00:00, 535.28it/s]
+/data/data/ws/sard-parse/output/clean/CWE176_Improper_Handling_of_Unicode_Encoding done
+100%|█████████████████████████████████████████| 28/28 [00:00<00:00, 1137.76it/s]
+/data/data/ws/sard-parse/output/clean/CWE464_Addition_of_Data_Structure_Sentinel done
+100%|██████████████████████████████████████████| 27/27 [00:00<00:00, 431.95it/s]
+/data/data/ws/sard-parse/output/clean/CWE672_Operation_on_Resource_After_Expiration_or_Release done
+100%|█████████████████████████████████████████| 20/20 [00:00<00:00, 1521.41it/s]
+/data/data/ws/sard-parse/output/clean/CWE397_Throw_Generic_Exception done
+100%|█████████████████████████████████████████| 20/20 [00:00<00:00, 1329.56it/s]
+/data/data/ws/sard-parse/output/clean/CWE483_Incorrect_Block_Delimitation done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1239.94it/s]
+/data/data/ws/sard-parse/output/clean/CWE196_Unsigned_to_Signed_Conversion_Error done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 352.26it/s]
+/data/data/ws/sard-parse/output/clean/CWE222_Truncation_of_Security_Relevant_Information done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 365.50it/s]
+/data/data/ws/sard-parse/output/clean/CWE223_Omission_of_Security_Relevant_Information done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1104.43it/s]
+/data/data/ws/sard-parse/output/clean/CWE242_Use_of_Inherently_Dangerous_Function done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 370.23it/s]
+/data/data/ws/sard-parse/output/clean/CWE247_Reliance_on_DNS_Lookups_in_Security_Decision done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 689.12it/s]
+/data/data/ws/sard-parse/output/clean/CWE338_Weak_PRNG done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 380.78it/s]
+/data/data/ws/sard-parse/output/clean/CWE364_Signal_Handler_Race_Condition done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1059.02it/s]
+/data/data/ws/sard-parse/output/clean/CWE478_Missing_Default_Case_in_Switch done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1245.44it/s]
+/data/data/ws/sard-parse/output/clean/CWE479_Signal_Handler_Use_of_Non_Reentrant_Function done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1013.47it/s]
+/data/data/ws/sard-parse/output/clean/CWE480_Use_of_Incorrect_Operator done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1653.47it/s]
+/data/data/ws/sard-parse/output/clean/CWE481_Assigning_Instead_of_Comparing done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1591.43it/s]
+/data/data/ws/sard-parse/output/clean/CWE482_Comparing_Instead_of_Assigning done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1295.85it/s]
+/data/data/ws/sard-parse/output/clean/CWE484_Omitted_Break_Statement_in_Switch done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 2095.81it/s]
+/data/data/ws/sard-parse/output/clean/CWE526_Info_Exposure_Environment_Variables done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1536.66it/s]
+/data/data/ws/sard-parse/output/clean/CWE587_Assignment_of_Fixed_Address_to_Pointer done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 332.27it/s]
+/data/data/ws/sard-parse/output/clean/CWE605_Multiple_Binds_Same_Port done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 941.68it/s]
+/data/data/ws/sard-parse/output/clean/CWE615_Info_Exposure_by_Comment done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 783.79it/s]
+/data/data/ws/sard-parse/output/clean/CWE620_Unverified_Password_Change done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1544.61it/s]
+/data/data/ws/sard-parse/output/clean/CWE667_Improper_Locking done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1124.63it/s]
+/data/data/ws/sard-parse/output/clean/CWE676_Use_of_Potentially_Dangerous_Function done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1420.33it/s]
+/data/data/ws/sard-parse/output/clean/CWE685_Function_Call_With_Incorrect_Number_of_Arguments done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1352.71it/s]
+/data/data/ws/sard-parse/output/clean/CWE688_Function_Call_With_Incorrect_Variable_or_Reference_as_Argument done
+100%|██████████████████████████████████████████| 18/18 [00:00<00:00, 553.35it/s]
+/data/data/ws/sard-parse/output/clean/CWE780_Use_of_RSA_Algorithm_Without_OAEP done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1058.56it/s]
+/data/data/ws/sard-parse/output/clean/CWE785_Path_Manipulation_Function_Without_Max_Sized_Buffer done
+100%|█████████████████████████████████████████| 18/18 [00:00<00:00, 1464.32it/s]
+/data/data/ws/sard-parse/output/clean/CWE832_Unlock_of_Resource_That_is_Not_Locked done
+100%|█████████████████████████████████████████| 16/16 [00:00<00:00, 2276.42it/s]
+/data/data/ws/sard-parse/output/clean/CWE570_Expression_Always_False done
+100%|█████████████████████████████████████████| 16/16 [00:00<00:00, 2336.01it/s]
+/data/data/ws/sard-parse/output/clean/CWE571_Expression_Always_True done
+100%|███████████████████████████████████████████| 6/6 [00:00<00:00, 1367.63it/s]
+/data/data/ws/sard-parse/output/clean/CWE835_Infinite_Loop done
+100%|███████████████████████████████████████████| 3/3 [00:00<00:00, 1219.27it/s]
+/data/data/ws/sard-parse/output/clean/CWE562_Return_of_Stack_Variable_Address done
+100%|███████████████████████████████████████████| 2/2 [00:00<00:00, 2297.62it/s]
+/data/data/ws/sard-parse/output/clean/CWE561_Dead_Code done
+100%|███████████████████████████████████████████| 2/2 [00:00<00:00, 1831.57it/s]
+/data/data/ws/sard-parse/output/clean/CWE674_Uncontrolled_Recursion done
+100%|███████████████████████████████████████████| 1/1 [00:00<00:00, 1635.21it/s]
+/data/data/ws/sard-parse/output/clean/CWE440_Expected_Behavior_Violation done
+
+进程已结束，退出代码为 0
